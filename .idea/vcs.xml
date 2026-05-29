@@ -2,9 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/data_raw/MATH-Hard" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/data_raw/MMLU-Pro" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/data_raw/bbh" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/data_raw/results" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/data_raw_clean/contents" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/data_raw_clean/results" vcs="Git" />
   </component>
 </project>

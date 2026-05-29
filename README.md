@@ -10,6 +10,8 @@ This project applies Item Response Theory (IRT) to analyze whether benchmark ite
 
 We fit 2PL IRT models to extract per-item difficulty (b) and discrimination (a) parameters, then test whether these parameters drift as the population of evaluated models changes over time and across architectures.
 
+> **Note:** The final paper reports results for BBH and MATH-Hard only. GPQA-Diamond and MuSR have only 3 subtask groups each — too few for reliable rank-order analysis. Their data and IRT fits are retained in this repo for exploratory use.
+
 ---
 
 ## 2. Repository Structure
@@ -24,7 +26,6 @@ We fit 2PL IRT models to extract per-item difficulty (b) and discrimination (a) 
 │   ├── math_scores_*.parquet
 │   ├── gpqa_scores_*.parquet
 │   ├── musr_scores_*.parquet
-│   └── models.parquet
 ├── data_irt/                    # IRT parameter outputs (CSV)
 │   ├── bbh/                     # bbh_difficulties_2pl.csv, bbh_discriminations_2pl.csv
 │   ├── math/

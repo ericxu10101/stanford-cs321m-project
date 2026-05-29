@@ -18,25 +18,31 @@ We fit 2PL IRT models to extract per-item difficulty (b) and discrimination (a) 
 
 ```
 .
-├── data_raw/                    # Raw benchmark data and Open LLM Leaderboard results
-│   ├── results/                 # Per-model result files from Open LLM Leaderboard v2
-│   └── models.parquet           # Model metadata
-├── data_raw_clean/              # Cleaned score matrices (parquet)
-│   ├── bbh_scores_*.parquet
-│   ├── math_scores_*.parquet
-│   ├── gpqa_scores_*.parquet
-│   ├── musr_scores_*.parquet
-├── data_irt/                    # IRT parameter outputs (CSV)
-│   ├── bbh/                     # bbh_difficulties_2pl.csv, bbh_discriminations_2pl.csv
+├── data_raw/                          # Raw inputs (not fully tracked in git — see §4)
+│   ├── results/                       # Per-model result JSONs from Open LLM Leaderboard v2
+│   ├── bbh/                           # BIG-Bench Hard item files
+│   ├── MATH-Hard/                     # MATH-Hard test/train splits
+│   └── models.parquet                 # Model metadata (included in repo)
+├── data_raw_clean/                    # Cleaned score matrices, one file per benchmark
+│   ├── {bbh,math,gpqa,musr}_scores_full.parquet    # All evaluation records
+│   └── {bbh,math,gpqa,musr}_scores_unique.parquet  # Deduplicated (latest run per model)
+├── data_irt/                          # Fitted IRT parameters (output of p2)
+│   ├── bbh/
+│   │   ├── bbh_difficulties_2pl.csv      # rows = (cohort, arch), cols = subtasks
+│   │   └── bbh_discriminations_2pl.csv
 │   ├── math/
 │   ├── gpqa/
 │   └── musr/
-├── notebooks/                   # Analysis pipeline (run in order)
-│   ├── p0_population_stats.ipynb 
-│   ├── p1_data_collect.ipynb 
-│   ├── p2_irt_pipe.ipynb        
-│   ├── p3_post_analysis.ipynb   
-└── torch_measure_ext/           # Extended IRT models (beta-Rasch, beta-2PL)
+├── notebooks/                         # Analysis pipeline — run in order
+│   ├── p0_split_model_cohort.ipynb    # (optional) Assign cohort labels; visualize arch mix
+│   ├── p1_model_scores_collect.ipynb  # Extract per-model benchmark scores → data_raw_clean/
+│   ├── p2_irt_pipe.ipynb              # Fit 2PL IRT per (arch × cohort) → data_irt/
+│   ├── p3_post_analysis.ipynb         # Analysis & figures (Fig 1–4)
+│   └── fig{1..4}_*.pdf                # Output figures
+└── torch_measure_ext/                 # Project-local IRT model extensions
+    ├── beta_twopl.py                  # Beta-regularised 2PL model
+    ├── beta_rasch.py                  # Beta-regularised Rasch model
+    └── loss_fn.py                     # Custom loss functions
 ```
 
 ---
@@ -90,18 +96,12 @@ All notebooks are in `notebooks/`. Run them in the order below; each writes its 
 jupyter nbconvert --to notebook --execute notebooks/<notebook>.ipynb
 ```
 
-- `p0_population_stats.ipynb` *(optional)* — Exploratory analysis of model metadata in `data_raw/models.parquet`. Not required to reproduce paper results.
-- `p1_data_collect.ipynb` — Preprocesses raw leaderboard results from `data_raw/`; outputs cleaned score matrices to `data_raw_clean/`.
-- `p2_irt_pipe.ipynb` — Core IRT fitting pipeline. Fits 2PL models per cohort and architecture family; outputs parameter CSVs to `data_irt/`. (IRT fitting uses results may vary slightly across hardware.)
-- `p3_post_analysis.ipynb` — Full analysis and figure generation. Reproduces all statistics and figures in the paper. (The `data_irt/` CSVs are the exact inputs to `p3_post_analysis.ipynb`; figures can be regenerated without re-running IRT.)
-
-
-| # | Notebook | Input | Notes | Output |                                                                                                                                                                                                   
-|---|----------|-------|-------|--------|
-| 0 | `p0_population_stats.ipynb` | `data_raw/models.parquet` | Optional. Exploratory statistics on model metadata. | — |                                                                                                                   
-| 1 | `p1_data_collect.ipynb` | `data_raw/` | Cleans and filters leaderboard results into per-benchmark score matrices. | `data_raw_clean/` |                                                                                               
-| 2 | `p2_irt_pipe.ipynb` | `data_raw_clean/` | Fits 2PL IRT models for each (benchmark × cohort) and (benchmark × architecture) group. | `data_irt/` |                                                                                     
-| 3 | `p3_post_analysis.ipynb` | `data_irt/` | Computes all statistics reported in the paper and generates the five figures. | figures & stats |
+| # | Notebook | Input | Output                          | Notes |
+|---|----------|-------|---------------------------------|-------|
+| 0 | `p0_split_model_cohort.ipynb` | `data_raw/models.parquet` | `data_raw_clean/models.parquet` | Assigns quarterly cohort labels and visualizes architecture mix per cohort. |
+| 1 | `p1_model_scores_collect.ipynb` | `data_raw/results/` | `data_raw_clean/`               | Extracts per-model benchmark scores from raw JSON files. Run once per benchmark by setting `BENCH` at the top of the notebook. |
+| 2 | `p2_irt_pipe.ipynb` | `data_raw_clean/` | `data_irt/`                     | Fits 2PL IRT models for every `(arch × cohort)` group. Results may vary slightly across hardware; reported numbers are stable to ±0.01 in ρ. |
+| 3 | `p3_post_analysis.ipynb` | `data_irt/` | `fig{1..4}_*.pdf`               | Computes all statistics and generates the four paper figures. The `data_irt/` CSVs are the exact inputs — figures can be regenerated without re-running IRT. |
 
 ---
 

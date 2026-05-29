@@ -102,3 +102,9 @@ jupyter nbconvert --to notebook --execute notebooks/<notebook>.ipynb
 | 1 | `p1_data_collect.ipynb` | `data_raw/` | Cleans and filters leaderboard results into per-benchmark score matrices. | `data_raw_clean/` |                                                                                               
 | 2 | `p2_irt_pipe.ipynb` | `data_raw_clean/` | Fits 2PL IRT models for each (benchmark × cohort) and (benchmark × architecture) group. | `data_irt/` |                                                                                     
 | 3 | `p3_post_analysis.ipynb` | `data_irt/` | Computes all statistics reported in the paper and generates the five figures. | figures & stats |
+
+---
+
+## 7. Acknowledgements
+
+Special thanks to the [Stanford AI Measure Science (AIMS) Lab](https://aimslab.stanford.edu) for their foundational work on psychometric measurement of AI systems, and for developing the `torch_measure` library that this project builds on.

@@ -91,17 +91,13 @@ jupyter nbconvert --to notebook --execute notebooks/<notebook>.ipynb
 
 - `p0_population_stats.ipynb` *(optional)* — Exploratory analysis of model metadata in `data_raw/models.parquet`. Not required to reproduce paper results.
 - `p1_data_collect.ipynb` — Preprocesses raw leaderboard results from `data_raw/`; outputs cleaned score matrices to `data_raw_clean/`.
-- `p2_irt_pipe.ipynb` — Core IRT fitting pipeline. Fits 2PL models per cohort and architecture family; outputs parameter CSVs to `data_irt/`.
-- `p3_post_analysis.ipynb` — Full analysis and figure generation. Reproduces all statistics and figures in the paper.
+- `p2_irt_pipe.ipynb` — Core IRT fitting pipeline. Fits 2PL models per cohort and architecture family; outputs parameter CSVs to `data_irt/`. (IRT fitting uses results may vary slightly across hardware.)
+- `p3_post_analysis.ipynb` — Full analysis and figure generation. Reproduces all statistics and figures in the paper. (The `data_irt/` CSVs are the exact inputs to `p3_post_analysis.ipynb`; figures can be regenerated without re-running IRT.)
 
 
-| # | Notebook | Input | Output | Notes |                                                                                                                                                                                                   
-|---|----------|-------|--------|-------|                                                                                                                                                                                                   
-| 0 | `p0_population_stats.ipynb` | `data_raw/models.parquet` | — | Optional. Exploratory statistics on model metadata. |                                                                                                                   
-| 1 | `p1_data_collect.ipynb` | `data_raw/` | `data_raw_clean/` | Cleans and filters leaderboard results into per-benchmark score matrices. |                                                                                               
-| 2 | `p2_irt_pipe.ipynb` | `data_raw_clean/` | `data_irt/` | Fits 2PL IRT models for each (benchmark × cohort) and (benchmark × architecture) group. |                                                                                     
-| 3 | `p3_post_analysis.ipynb` | `data_irt/` | figures & stats | Computes all statistics reported in the paper and generates the five figures. |
-
-**Notes:**
-- The `data_irt/` CSVs are the exact inputs to `generate_figures.py`; figures can be regenerated without re-running IRT.
-- IRT fitting uses results may vary slightly across hardware.
+| # | Notebook | Input | Notes | Output |                                                                                                                                                                                                   
+|---|----------|-------|-------|--------|
+| 0 | `p0_population_stats.ipynb` | `data_raw/models.parquet` | Optional. Exploratory statistics on model metadata. | — |                                                                                                                   
+| 1 | `p1_data_collect.ipynb` | `data_raw/` | Cleans and filters leaderboard results into per-benchmark score matrices. | `data_raw_clean/` |                                                                                               
+| 2 | `p2_irt_pipe.ipynb` | `data_raw_clean/` | Fits 2PL IRT models for each (benchmark × cohort) and (benchmark × architecture) group. | `data_irt/` |                                                                                     
+| 3 | `p3_post_analysis.ipynb` | `data_irt/` | Computes all statistics reported in the paper and generates the five figures. | figures & stats |

@@ -105,6 +105,6 @@ jupyter nbconvert --to notebook --execute notebooks/<notebook>.ipynb
 
 ---
 
-## 7. Acknowledgements
+## 6. Acknowledgements
 
-Special thanks to the [Stanford AI Measure Science (AIMS) Lab](https://aimslab.stanford.edu) for their foundational work on psychometric measurement of AI systems, and for developing the `torch_measure` library that this project builds on.
+Special thanks to the [Stanford AI Measure Science (AIMS) Lab](https://aimslab.stanford.edu) for their foundational work on psychometric measurement of AI systems.
